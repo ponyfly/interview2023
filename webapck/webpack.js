@@ -139,3 +139,19 @@ const content = bundle('./src/index.js')
 //写入到我们的dist目录下
 fs.mkdirSync('./dist');
 fs.writeFileSync('./dist/bundle.js',content)
+
+// 总结
+/* 一、getModuleInfo 获取模块信息 返回{file,deps,code} 该模块的路径（file），该模块的依赖（deps），该模块转化成es5的代码
+* 1. 读取文件
+* 2. 使用parse解析文件为ast
+* 3. 使用traverse存储模块依赖
+* 4. 将ast转换为es5语法代码
+* 二、parseModules 递归方法，递归获取依赖
+* 1. 我们首先传入主模块路径
+  2. 将获得的模块信息放到temp数组里。
+  3. 外面的循坏遍历temp数组，此时的temp数组只有主模块
+  4. 循环里面再获得主模块的依赖deps
+  5. 遍历deps，通过调用getModuleInfo将获得的依赖模块信息push到temp数组里。
+  三、处理两个关键字 require exports
+  1. 定义require函数，定义exports对象
+* */
