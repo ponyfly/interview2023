@@ -25,14 +25,20 @@
       console.log('2 timeout')
     })
   }
-  const button = document.getElementById('click')
+  // 方式一：通过js调用
   const button2 = document.createElement('button')
-  button.addEventListener('click', handle1)
-  button.addEventListener('click', handle2)
   button2.addEventListener('click', handle1)
   button2.addEventListener('click', handle2)
-  // button2.click()
+  button2.click() // 同步执行handle1() handle2()  handle1 handle2 1then 2then 1timeout 2timeout
 
+  // 方式二：通过用户点击
+  const button = document.getElementById('click')
+  button.addEventListener('click', handle1)
+  button.addEventListener('click', handle2)
+  // 异步执行handle1() handle2() handle1() handle2()被加入到了任务队列
+  // handle1 1then handle2 2then 1timeout 2timeout
+
+  // 方式三：通过setTimeout调用,同方式二输出结果
   setTimeout(() => {
     handle1()
   })
