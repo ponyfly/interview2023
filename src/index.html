@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+      #main
+      {
+          width:1000px;
+          height:300px;
+          border:1px solid black;
+          display:flex;
+      }
+
+      #main div
+      {
+          /*flex:1;*/
+      }
+      #main .div1 {
+          flex: 1;
+      }
+      /* 初始宽度200 flex-grow:1 其他四个元素均分剩下的600px 每个是150 所以div2宽度未200+150 */
+      #main .div2 {
+          flex: 1 0 200px;
+      }
+      #main .div3 {
+          flex: 1 0 200px;
+      }
+      #main .div4 {
+          flex: 1;
+      }
+  </style>
+</head>
+<body>
+<div id="main">
+  <div class="div1" style="background-color:coral;">红色</div>
+  <div class="div2" style="background-color:lightblue;">蓝色</div>
+  <div class="div3" style="background-color:rebeccapurple;">蓝色</div>
+  <div class="div4" style="background-color:lightgreen;">绿色 div</div>
+</div>
+<script src="./obsever.js"></script>
+</body>
+</html>
