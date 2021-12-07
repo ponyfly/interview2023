@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<button id="click">点我</button>
+<script>
+  function handle1() {
+    console.log('handle1')
+    Promise.resolve().then(() => {
+      console.log('1 then')
+    })
+    setTimeout(() => {
+      console.log('1 timeout')
+    })
+  }
+  function handle2() {
+    console.log('handle2')
+    Promise.resolve().then(() => {
+      console.log('2 then')
+    })
+    setTimeout(() => {
+      console.log('2 timeout')
+    })
+  }
+  const button = document.getElementById('click')
+  const button2 = document.createElement('button')
+  button.addEventListener('click', handle1)
+  button.addEventListener('click', handle2)
+  button2.addEventListener('click', handle1)
+  button2.addEventListener('click', handle2)
+  // button2.click()
+
+  setTimeout(() => {
+    handle1()
+  })
+  setTimeout(() => {
+    handle2()
+  })
+</script>
+</body>
+</html>
