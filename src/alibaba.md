@@ -55,6 +55,7 @@
    
 回流和重绘
 + 回流：部分或全部元素的尺寸、结构发生变化导致浏览器重新渲染文档，页面初始化渲染，添加删除元素，修改元素尺寸，改变元素位置，改变元素内容
+   - clientWidth offsetWidth scrollWidth getComputedStyle() getBoundingClientRect() scrollTo()
 + 重绘：当页面中元素样式的改变并不影响它在文档流中的位置时（例如：color、background-color、visibility等），浏览器会将新样式赋予给元素并重新绘制它，这个过程称为重绘
 可以优化的地方：
 + dns解析：DNS缓存 DNS负载均衡
