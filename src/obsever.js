@@ -1,7 +1,8 @@
 class Observer{
     constructor(data){
-      this.walk(data)
       this.subs = {}
+      initData(this, data)
+      this.walk(data)
     }
     walk (data) {
       let keys = Object.keys(data)
@@ -11,16 +12,17 @@ class Observer{
       }
     }
     defineReactive (data, key, val) {
-      Object.defineProperty(this, key, {
+      let self = this
+      Object.defineProperty(data, key, {
         get () {
-          return data[key]
+          return val
         },
         set (newVal) {
-          const oldVal = data[key]
-          data[key] = newVal
-          if (this.subs[key]) {
-            this.subs[key].forEach(cb => {
-              cb(newVal, oldVal)
+          let temp = val
+          val = newVal
+          if (self.subs[key]) {
+            self.subs[key].forEach(cb => {
+              cb(newVal, temp)
             })
           }
         }
@@ -33,6 +35,23 @@ class Observer{
         this.subs[val].push(callback)
       }
     }
+}
+function initData (vm, data) {
+  vm._data = data
+  for (let key in data) {
+    proxy(vm, `_data`, key);
+  }
+}
+// 数据代理
+function proxy(object, sourceKey, key) {
+  Object.defineProperty(object, key, {
+    get() {
+      return object[sourceKey][key];
+    },
+    set(newValue) {
+      object[sourceKey][key] = newValue;
+    },
+  });
 }
 
 const data = new Observer({
