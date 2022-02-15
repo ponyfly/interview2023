@@ -32,7 +32,7 @@
          + max-age：最长缓存时间
          + no-cache：不使用强缓存，每次都要使用协商缓存进行对比
          + no-store：不使用强缓存和协商缓存，每次都要从服务端获取最新的资源
-         + public:允许客户端和服务器缓存资源
+         + public:允许客户端和代理服务器缓存资源
          + private:资源只有客户端可以缓存
    + 协商缓存：if-modify-since/last-modify  if-none-match/e-tag
 4. url从输入到浏览器解析的一系列事件
@@ -42,9 +42,20 @@
    + 服务器处理请求并返回HTTP报文
    + 浏览器解析渲染页面
    + 连接结束。
+5. 缓存优点
+   + 减少了服务器的压力
+   + 节省了带宽
+   + 提高了浏览器的加载网页的速度
+6. 浏览器输入URL f5 Ctrl+f5  
+   浏览器输入URL：使用缓存
+   f5:使用协商缓存
+   Ctrl+f5:不使用任何缓存
+7. 状态码
+   301永久移动 302临时移动 304未修改 401未授权 403 服务器拒绝请求 404 服务器找不到请求的网页
    
 回流和重绘
 + 回流：部分或全部元素的尺寸、结构发生变化导致浏览器重新渲染文档，页面初始化渲染，添加删除元素，修改元素尺寸，改变元素位置，改变元素内容
+   - clientWidth offsetWidth scrollWidth getComputedStyle() getBoundingClientRect() scrollTo()
 + 重绘：当页面中元素样式的改变并不影响它在文档流中的位置时（例如：color、background-color、visibility等），浏览器会将新样式赋予给元素并重新绘制它，这个过程称为重绘
 可以优化的地方：
 + dns解析：DNS缓存 DNS负载均衡
