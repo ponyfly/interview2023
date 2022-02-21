@@ -261,3 +261,70 @@ function longestCommonPrefix (strs) {
   return res
 }
 console.log(longestCommonPrefix(["dog","racecar","car"]))
+// 手写-字符串最长的不重复子串
+function lengthOfLongestSubstring (s) {
+  if (s.length === 0) {
+    return 0;
+  }
+  let slow = 0
+  let fast = 0
+  let len = s.length
+  let max = 0
+  while (fast < len) {
+    let i = s.substring(slow, fast).indexOf(s[fast])
+    if (i !== -1) {
+      slow = slow + i + 1
+    } else {
+      max = Math.max(max, fast - slow + 1)
+    }
+    fast++
+  }
+  return max
+}
+// 手写-如何找到数组中第一个没出现的最小正整数 怎么优化（字节）
+function firstMissingPositive (nums) {
+  let len = nums.length
+  let res = 1
+  let i = 0
+  while (res <= len) {
+    if (nums.indexOf(res) > -1) {
+      i++
+      res++
+    } else {
+      return res
+    }
+  }
+  return res
+}
+function firstMissingPositive1 (nums) {
+  let len = nums.length
+  let res = 1
+  let i = 0
+  let set = new Set(nums)
+  while (res <= len) {
+    if (set.has(res)) {
+      i++
+      res++
+    } else {
+      return res
+    }
+  }
+  return res
+}
+console.log(firstMissingPositive1([1,2,0]))
+// 手写-怎么在制定数据源里面生成一个长度为 n 的不重复随机数组 能有几种方法 时间复杂度多少（字节）
+function getTenNum (testArray, n) {
+  const cloneArr = [...testArray];
+  let res = []
+  let i = 0
+  while (i < n) {
+    const random = Math.floor(cloneArr.length * Math.random())
+    res.push(cloneArr.splice(random, 1)[0])
+    i++
+  }
+
+  return res
+}
+const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+const resArr = getTenNum(testArray, 14);
+console.log(resArr)
