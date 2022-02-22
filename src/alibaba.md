@@ -122,3 +122,8 @@ console.log(div.offsetWidth)
   + 两个都是延迟加载的意思
   + async是乱序的，而defer是顺序执行
   + 一般外链js使用defer
+### prefetch cache(预取缓存)
+
+link标签上带了prefetch，再次加载会出现。
+
+prefetch是预加载的一种方式，被标记为prefetch的资源，将会被浏览器在空闲时间加载。
