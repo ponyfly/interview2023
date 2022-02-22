@@ -328,3 +328,17 @@ function getTenNum (testArray, n) {
 const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const resArr = getTenNum(testArray, 14);
 console.log(resArr)
+// 写 Vue.extend 实现
+// import { mergeOptions } from ''
+Vue.extend = function (extendOptions) {
+  let Sub = function VueComponent (options) {
+    this._init(options)
+  }
+  Sub.prototype = Object.create(this.prototype)
+  Sub.prototype.constructor = Sub
+  Sub.options = mergeOptions(this.options, extendOptions)
+  return Sub
+}
+// vue-router 中路由方法 pushState 和 replaceState 能否触发 popSate 事件
+// 答案是：不能   popstate 事件会在点击后退、前进按钮(或调用 history.back()、history.forward()、history.go()方法)时触发
+
