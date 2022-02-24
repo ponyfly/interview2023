@@ -339,7 +339,27 @@ Vue.extend = function (extendOptions) {
 }
 // vue-router 中路由方法 pushState 和 replaceState 能否触发 popSate 事件
 // 答案是：不能   popstate 事件会在点击后退、前进按钮(或调用 history.back()、history.forward()、history.go()方法)时触发
+// common.js 和 es6 中模块引入的区别
+// 1、CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+// 2、CommonJS 模块是运行时加载，ES6 模块是编译时输出接口（静态编译）。
+// 3、CommonJs 是单个值导出，ES6 Module 可以导出多个
+// 4、CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
+// 5、CommonJs 的 this 是当前模块，ES6 Module 的 this 是 undefined
 
+// babel 是什么，原理了解吗
+// parse 解析  转换为AST 生产为新代码
+
+// 原型链判断
+Object.prototype.__proto__; // null
+Function.prototype.__proto__; // Object.prototype
+Object.__proto__; // Function.prototype
+Object instanceof Function;  // true
+Function instanceof Object; // true
+Function.prototype === Function.__proto__; // true
+
+//13 RAF 和 RIC 是什么
+// requestAnimationFrame： 告诉浏览器在下次重绘之前执行传入的回调函数(通常是操纵 dom，更新动画的函数)；由于是每帧执行一次，那结果就是每秒的执行次数与浏览器屏幕刷新次数一样，通常是每秒 60 次。
+// requestIdleCallback：: 会在浏览器空闲时间执行回调，也就是允许开发人员在主事件循环中执行低优先级任务，而不影响一些延迟关键事件。如果有多个回调，会按照先进先出原则执行，但是当传入了 timeout，为了避免超时，有可能会打乱这个顺序
 function flatter (arr) {
   if (!arr.length) return arr
   let res = []
