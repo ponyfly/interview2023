@@ -27,10 +27,8 @@ Function.prototype.myBind = function (context, ...args) {
     if (this instanceof _this) {
       this[fn] = _this
       this[fn](...[...args, ...restArgs])
-      delete this[fn]
     } else {
       context[fn](...[...args, ...restArgs])
-      delete context[fn]
     }
   }
   result.prototype = Object.create(this.prototype)
@@ -342,3 +340,115 @@ Vue.extend = function (extendOptions) {
 // vue-router 中路由方法 pushState 和 replaceState 能否触发 popSate 事件
 // 答案是：不能   popstate 事件会在点击后退、前进按钮(或调用 history.back()、history.forward()、history.go()方法)时触发
 
+function flatter (arr) {
+  if (!arr.length) return arr
+  let res = []
+  while(arr.some(item => Array.isArray(item))) {
+    res = [].concat(...arr)
+  }
+  return res
+}
+// 实现有并行限制的 Promise 调度器
+class Scheduler {
+  constructor(limit) {
+    this.maxCount = []
+    this.runCount = 0
+    this.queues = []
+  }
+  add (time, order) {
+    const fn = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log(order)
+          resolve(order)
+        }, time)
+      })
+    }
+
+    this.queues.push(fn)
+  }
+  taskStart () {
+    for (let i = 0; i < this.maxCount; i++) {
+      this.request()
+    }
+  }
+  request () {
+    if (this.queues.length === 0 || this.runCount > this.maxCount) return
+    this.runCount++
+    this.queues.shift()().then(() => {
+      this.runCount--
+      this.request()
+    })
+  }
+}
+
+const scheduler = new Scheduler(2)
+const addTask = (time, order) => {
+  scheduler.add(time, order)
+}
+// new 操作符
+function myNew(fn, ...args) {
+  const obj = Object.create(fn.prototype)
+  const res = fn.apply(obj, args)
+  if (res && typeof res === 'object') {
+    return res
+  } else {
+    return obj
+  }
+}
+// todo 深拷贝（考虑到复制 Symbol 类型）
+function deepClone (obj, hash = new WeakMap()) {
+  if (!isObject(obj)) return obj
+  if (hash.has(obj)) {
+    return hash.get(obj)
+  }
+  let target = Array.isArray(obj) ? [] : {}
+  hash.set(obj, target)
+  Reflect.ownKeys(obj).forEach(item => {
+    if (isObject(obj[item])) {
+      target[item] = deepClone(obj[item], hash)
+    } else {
+      target[item] = obj[item]
+    }
+  })
+  return target
+}
+// todo 实现myInstanceof
+function myInstanceof(obj, target) {
+  while (true) {
+    if (obj === null) return false
+    if (obj.__proto__ === target.prototype) return true
+    obj = obj.__proto__
+  }
+}
+// todo 柯里化
+function currying(fn, ...args) {
+  let length = fn.length
+  let allArgs = [...args]
+  let res = function (...innerArgs) {
+    allArgs = [...allArgs, ...innerArgs]
+    if (allArgs.length === length) {
+      return fn.apply(this, allArgs)
+    } else {
+      return res
+    }
+  }
+  return res
+}
+// 用法如下：
+// const add = (a, b, c) => a + b + c;
+// const a = currying(add, 1);
+// console.log(a(2,3))
+// 冒泡排序
+function bubbleSort (arr) {
+  const len = arr.length
+  for (let i = 0; i < len; i++) {
+    // j和j+1比较， 所以j< len -1
+    for (let j = 0; j < len - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+      }
+    }
+  }
+  return arr
+}
