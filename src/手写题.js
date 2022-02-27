@@ -459,7 +459,7 @@ function currying(fn, ...args) {
 // const add = (a, b, c) => a + b + c;
 // const a = currying(add, 1);
 // console.log(a(2,3))
-// 冒泡排序
+// todo 冒泡排序
 function bubbleSort (arr) {
   const len = arr.length
   for (let i = 0; i < len; i++) {
@@ -471,4 +471,273 @@ function bubbleSort (arr) {
     }
   }
   return arr
+}
+function quickSort (arr) {
+  if (arr.length < 2) return arr
+  let cur = arr[arr.length - 1]
+  let leftArr = []
+  let rightArr = []
+  for (let i = 0; i < arr.length - 1; i++) {
+    const arrElement = arr[i];
+    if (arrElement <= cur) {
+      leftArr.push(arrElement)
+    } else {
+      rightArr.push(arrElement)
+    }
+  }
+  return [...quickSort(leftArr), cur, ...quickSort(rightArr)]
+}
+// todo 二分查找--时间复杂度 log2(n) 如何确定一个数在一个有序数组中的位置
+
+function search (arr, target) {
+  let start = 0
+  let end = arr.length - 1
+  while (start <= end) {
+    let middle = Math.floor(start + (end - start) / 2)
+    if (arr[middle] === target) {
+      return middle
+    } else if (arr[middle] > target) {
+      end = middle - 1
+    } else if (arr[middle] > target) {
+      start = middle + 1
+    }
+  }
+  return -1
+}
+//todo  实现 LazyMan
+class LazyMan {
+  constructor(name) {
+    const task = () => {
+      console.log(`Hi! This is ${name}`);
+      this.next();
+    };
+    this.tasks = []
+    this.tasks.push(task)
+    setTimeout(() => {
+      this.next()
+    }, 0)
+  }
+  next () {
+    const task = this.tasks.shift()
+    task && task()
+  }
+  sleep (time) {
+    this._sleepWrapper(time, false)
+    return this
+  }
+  sleepFirst (time) {
+    this._sleepWrapper(time, true)
+    return this
+  }
+  _sleepWrapper (time, first) {
+    const task = () => {
+      setTimeout(() => {
+        console.log(`Wake up after ${time}`)
+        this.next()
+      }, time * 1000)
+    }
+    if (first) {
+      this.tasks.unshift(task)
+    } else {
+      this.tasks.push(task)
+    }
+  }
+  eat (name) {
+    const task = () => {
+      console.log(`Eat ${name}`)
+      this.next()
+    }
+    this.tasks.push(task)
+    return this
+  }
+}
+// todo 写版本号排序的方法
+function sortVersion (arr) {
+  arr.sort((a, b) => {
+    let i = 0
+    let arrA = a.split('.')
+    let arrB = b.split('.')
+    while (true) {
+      let s1 = arrA[i]
+      let s2 = arrB[i]
+      i++
+      if (s1 === undefined || s2 === undefined) {
+        return arrB.length - arrA.length
+      }
+      if (s1 === s2) continue
+      return s2 - s1
+    }
+  })
+}
+// LRUCache
+class LRUCache {
+  constructor(maxSize) {
+    this.maxSize = maxSize
+    this.map = new Map()
+  }
+  get (key) {
+    if (this.map.has(key)) {
+      const temp = this.map.get(key)
+      this.map.delete(key)
+      this.map.add(key, temp)
+      return temp
+    }
+    return -1
+  }
+  put (key, value) {
+    if (this.map.has(key)) {
+      this.map.delete(key)
+      this.map.add(key, value)
+    }
+    if (this.map.size < this.maxSize) {
+      this.map.add(key, value)
+    }
+    this.map.delete(this.map.keys().next().value)
+    this.map.add(key, value)
+  }
+}
+// add
+function add (...args) {
+  let allArgs = [...args]
+  function res(...innerArgs) {
+    if (innerArgs.length) {
+      allArgs = [...allArgs, ...innerArgs]
+      return res
+    } else {
+      return allArgs.reduce((pre, cur) => pre + cur)
+    }
+  }
+  return res
+}
+// todo 动态规划求解硬币找零问题
+function coinChange (coins, amount) {
+  const f = []
+  f[0] = 0
+  for (let i = 0; i <= amount; i++) {
+    f[i] = Infinity
+    for (let j = 0; j < coins.length; j++) {
+      const coin = coins[j];
+      if (i - coin >= 0) {
+        f[i] = Math.min(f[i], f[i - coin] + 1)
+      }
+    }
+  }
+  if (f[amount] === Infinity) return -1
+  return f[amount]
+}
+// todo 请实现 DOM2JSON 一个函数，可以把一个 DOM 节点输出 JSON 的格式
+function dom2Json (dom) {
+  const res = {}
+  res.tag = dom.tagName
+  res.children = []
+  dom.childNodes.forEach((child) => res.children.push(dom2Json(child)));
+  return res
+}
+// 类数组转化为数组的方法
+// const arrayLike = new Set()
+// [...arrayLike]
+// Array.from(arrayLike)
+// Array.prototype.slice.call(arrayLike)
+
+// todo Object.is 实现
+Object.myIs = function (x, y) {
+  if (x === y) {
+    return !x  || 1 / x !== 1 / y
+  }
+  return x !== x && y !== y
+}
+
+// todo 利用 XMLHttpRequest 手写 AJAX 实现
+function getJSON (url) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', url)
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status === 200 || xhr.status === 304) {
+        resolve(xhr.responseText);
+      } else {
+        reject(new Error(xhr.responseText));
+      }
+    };
+    xhr.send();
+  })
+}
+// todo 分片思想解决大数据量渲染问题
+function render () {
+  let ul = document.getElementById("container");
+// 插入十万条数据
+  let total = 100000;
+// 一次插入 20 条
+  let once = 20;
+//总页数
+  let page = total / once;
+//每条记录的索引
+  let index = 0;
+//循环加载数据
+  function loop(curTotal, curIndex) {
+    if (curTotal <= 0) {
+      return false;
+    }
+    //每页多少条
+    let pageCount = Math.min(curTotal, once);
+    window.requestAnimationFrame(function () {
+      for (let i = 0; i < pageCount; i++) {
+        let li = document.createElement("li");
+        li.innerText = curIndex + i + " : " + ~~(Math.random() * total);
+        ul.appendChild(li);
+      }
+      loop(curTotal - pageCount, curIndex + pageCount);
+    });
+  }
+  loop(total, index);
+
+}
+// 实现模板字符串解析功能
+function render(template, data) {
+  let computed = template.replace(/\{\{(\w+)\}\}/g, function (match, key) {
+    return data[key];
+  });
+  return computed;
+}
+// todo 列表转成树形结构
+function listToTree(data) {
+  let temp = {}
+  let treeData = []
+
+  for (let i = 0; i < data.length; i++) {
+    temp[data[i].id] = data[i]
+  }
+
+  for (const key of temp) {
+    if (+temp[key].parentId === 0) {
+     treeData.push(temp[key])
+    } else {
+      if (!temp[temp[key].parentId].children) {
+        temp[temp[key].parentId].children = []
+      }
+      temp[temp[key].parentId].children.push(temp[key])
+    }
+  }
+
+  return treeData
+}
+// todo 树形结构转成列表
+function treeToList (data) {
+  let res = []
+
+  function dfs (tree) {
+    tree.forEach(item => {
+      if (item.children) {
+        dfs(item.children)
+        delete item.children
+      }
+      res.push(item)
+    })
+  }
+
+  dfs(data)
+
+  return res
 }
