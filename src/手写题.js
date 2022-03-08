@@ -27,10 +27,8 @@ Function.prototype.myBind = function (context, ...args) {
     if (this instanceof _this) {
       this[fn] = _this
       this[fn](...[...args, ...restArgs])
-      delete this[fn]
     } else {
       context[fn](...[...args, ...restArgs])
-      delete context[fn]
     }
   }
   result.prototype = Object.create(this.prototype)
@@ -362,3 +360,115 @@ Function.prototype === Function.__proto__; // true
 //13 RAF 和 RIC 是什么
 // requestAnimationFrame： 告诉浏览器在下次重绘之前执行传入的回调函数(通常是操纵 dom，更新动画的函数)；由于是每帧执行一次，那结果就是每秒的执行次数与浏览器屏幕刷新次数一样，通常是每秒 60 次。
 // requestIdleCallback：: 会在浏览器空闲时间执行回调，也就是允许开发人员在主事件循环中执行低优先级任务，而不影响一些延迟关键事件。如果有多个回调，会按照先进先出原则执行，但是当传入了 timeout，为了避免超时，有可能会打乱这个顺序
+function flatter (arr) {
+  if (!arr.length) return arr
+  let res = []
+  while(arr.some(item => Array.isArray(item))) {
+    res = [].concat(...arr)
+  }
+  return res
+}
+// 实现有并行限制的 Promise 调度器
+class Scheduler {
+  constructor(limit) {
+    this.maxCount = []
+    this.runCount = 0
+    this.queues = []
+  }
+  add (time, order) {
+    const fn = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log(order)
+          resolve(order)
+        }, time)
+      })
+    }
+
+    this.queues.push(fn)
+  }
+  taskStart () {
+    for (let i = 0; i < this.maxCount; i++) {
+      this.request()
+    }
+  }
+  request () {
+    if (this.queues.length === 0 || this.runCount > this.maxCount) return
+    this.runCount++
+    this.queues.shift()().then(() => {
+      this.runCount--
+      this.request()
+    })
+  }
+}
+
+const scheduler = new Scheduler(2)
+const addTask = (time, order) => {
+  scheduler.add(time, order)
+}
+// new 操作符
+function myNew(fn, ...args) {
+  const obj = Object.create(fn.prototype)
+  const res = fn.apply(obj, args)
+  if (res && typeof res === 'object') {
+    return res
+  } else {
+    return obj
+  }
+}
+// todo 深拷贝（考虑到复制 Symbol 类型）
+function deepClone (obj, hash = new WeakMap()) {
+  if (!isObject(obj)) return obj
+  if (hash.has(obj)) {
+    return hash.get(obj)
+  }
+  let target = Array.isArray(obj) ? [] : {}
+  hash.set(obj, target)
+  Reflect.ownKeys(obj).forEach(item => {
+    if (isObject(obj[item])) {
+      target[item] = deepClone(obj[item], hash)
+    } else {
+      target[item] = obj[item]
+    }
+  })
+  return target
+}
+// todo 实现myInstanceof
+function myInstanceof(obj, target) {
+  while (true) {
+    if (obj === null) return false
+    if (obj.__proto__ === target.prototype) return true
+    obj = obj.__proto__
+  }
+}
+// todo 柯里化
+function currying(fn, ...args) {
+  let length = fn.length
+  let allArgs = [...args]
+  let res = function (...innerArgs) {
+    allArgs = [...allArgs, ...innerArgs]
+    if (allArgs.length === length) {
+      return fn.apply(this, allArgs)
+    } else {
+      return res
+    }
+  }
+  return res
+}
+// 用法如下：
+// const add = (a, b, c) => a + b + c;
+// const a = currying(add, 1);
+// console.log(a(2,3))
+// 冒泡排序
+function bubbleSort (arr) {
+  const len = arr.length
+  for (let i = 0; i < len; i++) {
+    // j和j+1比较， 所以j< len -1
+    for (let j = 0; j < len - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+      }
+    }
+  }
+  return arr
+}
