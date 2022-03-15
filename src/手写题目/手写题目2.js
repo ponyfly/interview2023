@@ -276,7 +276,7 @@ class MyPromise {
 function coinChange (coins, amount) {
   const res = []
   res[0] = 0 // todo 注意
-  for (let i = 0; i <= amount; i++) { // todo: 注意
+  for (let i = 1; i <= amount; i++) { // todo: 注意
     res[i] = Infinity
     for (let j = 0; j < coins.length; j++) {
       const coin = coins[j];

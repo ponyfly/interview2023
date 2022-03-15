@@ -498,7 +498,7 @@ function search (arr, target) {
       return middle
     } else if (arr[middle] > target) {
       end = middle - 1
-    } else if (arr[middle] > target) {
+    } else if (arr[middle] < target) {
       start = middle + 1
     }
   }
@@ -613,7 +613,7 @@ function add (...args) {
 function coinChange (coins, amount) {
   const f = []
   f[0] = 0
-  for (let i = 0; i <= amount; i++) {
+  for (let i = 1; i <= amount; i++) {
     f[i] = Infinity
     for (let j = 0; j < coins.length; j++) {
       const coin = coins[j];
