@@ -12,5 +12,15 @@ get post head options delete
 > 在使用curl做POST的时候, 当要POST的数据大于1024字节的时候, curl并不会直接就发起POST请求, 而是会分为俩步,
 发送一个请求, 包含一个Expect:100-continue, 询问Server使用愿意接受数据
 接收到Server返回的100-continue应答以后, 才把数据POST给Server
+## 常见状态码
+200 - 成功。
+301 - 永久重定向（配合 location，浏览器自动处理）。
+302 - 临时重定向（配合 location，浏览器自动处理）。
+304 - 资源未被修改。
+403 - 没权限。
+404 - 资源未找到。
+500 - 服务器错误。
+502 - gatway
+504 - 网关超时。
 
 
