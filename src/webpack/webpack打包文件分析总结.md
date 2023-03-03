@@ -51,7 +51,7 @@ s加载完成后，调用了 window["webpackJsonp"]的push方法，push方法中
 + 调用之前的promise的resolve方法
 
 ## loader总结
-loader本质上就是一个函数，这个函数会在我们在我们加载一些文件时执行
+loader本质上就是一个函数，这个函数会在我们加载一些文件时执行
 ```
 // index.js
 console.log('hello')
