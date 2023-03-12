@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+      * {
+          margin: 0;padding: 0;
+      }
+    #app {
+        font-size: 0;
+        width: 200px;
+        overflow: hidden;
+        height: 100px;
+    }
+    .wrapper {
+        display: inline-block;
+        white-space: nowrap;
+        font-size: 0;
+        /*display: flex;*/
+        animation: run 4s steps(1) 0s infinite;
+        /*transform: translateX(-100%);*/
+    }
+    .wrapper > div {
+        font-size: 30px;
+        display: inline-block;
+        /*flex: 0 0 auto;*/
+        width: 200px;
+        height: 100px;
+        background-color: #18d9f8;
+    }
+    ul:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+    @keyframes run {
+        to {
+            transform: translateX(-100%);
+        }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="wrapper">
+    <div style="background-color:#410a0a;">1</div>
+    <div style="background-color:#296580;">2</div>
+    <div style="background-color:#3b8236;">3</div>
+    <div style="background-color:#685928;">4</div>
+  </div>
+</div>
+
+</body>
+</html>

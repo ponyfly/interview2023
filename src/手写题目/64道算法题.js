@@ -3,7 +3,7 @@ var isPalindrome = function(head) {
   let left = head
   function reverse (right) {
     if (right === null) return true
-    let res = reverse(right.value)
+    let res = reverse(right.next)
     res = res && left.value === right.value
     left = left.next
     return res

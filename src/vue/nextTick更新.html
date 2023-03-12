@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+<div id="app">
+  <div class="page1"></div>
+  <div class="page2"> {{ message }}</div>
+</div>
+<script>
+const page1 = document.querySelector('.page1')
+page1.innerHTML = 'hello'
+console.log(page1.innerHTML)
+</script>
+
+<script>
+	var app = new Vue({
+		el: '#app',
+		data: {
+			message: 'Hello Vue!'
+		}
+	})
+	const page2 = document.querySelector('.page2')
+	console.log('before', page2.innerHTML)
+  app.message = 'zhangzechao'
+	console.log('after', page2.innerHTML)
+  app.$nextTick(() => {
+		console.log('nextTick after', page2.innerHTML)
+  })
+</script>
+</body>
+</html>

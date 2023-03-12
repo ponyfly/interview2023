@@ -1,11 +1,9 @@
-function myNew (cons, ...args) {
-	if (typeof cons !== 'function') {
-		throw TypeError('not a function')
+function myNew (fn, ...args) {
+	const obj = Object.create(fn.prototype)
+	const target = fn.apply(obj, args)
+	if (typeof target === 'object' || typeof target === 'function') {
+		return target
+	} else {
+		return obj
 	}
-	let res = {}
-	// ToDo： 要加原型
-	res.__protp__ = cons.prototype
-	let obj = cons.apply(res, args)
-
-	return typeof obj === 'object' ? obj : res
 }

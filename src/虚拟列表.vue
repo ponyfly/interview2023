@@ -90,7 +90,7 @@ export default {
       //此时的结束索引
       this.end = this.start + this.visibleCount
       //此时的偏移距离
-      this.startOffset = scrollTop - (scrollTop % this.itemSize)
+      this.startOffset = this.start * this.itemSize
     }
   }
 }
