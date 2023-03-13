@@ -232,4 +232,4 @@ function coinChange (coins, amount) {
 	if (f[amount] === Infinity) return -1
 	return f[amount]
 }
-console.log(coinChange([1,5,10,25], 36), 33)
+console.log(coinChange([1,5,10,25], 36))
